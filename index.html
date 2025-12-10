@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumbo</title>
+
+<style>
+    body {
+        margin: 0;
+        background: #e5ddd5;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+
+    #chat {
+        padding: 15px;
+        padding-bottom: 60px;
+        max-width: 500px;
+        margin: auto;
+        height: 100vh;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+
+    .msg {
+        background: #ffffff;
+        color: #000;
+        padding: 10px 14px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        max-width: 80%;
+        width: fit-content;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        opacity: 0;
+        animation: fadeIn 0.3s forwards;
+    }
+
+    .typing {
+        display: flex;
+        align-items: center;
+        background: #ffffff;
+        padding: 8px 12px;
+        width: fit-content;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        margin: 0 2px;
+        background: #999;
+        border-radius: 50%;
+        animation: blink 1s infinite;
+    }
+
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes blink {
+        0% { opacity: .2; }
+        50% { opacity: 1; }
+        100% { opacity: .2; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    #finalScreen {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.92);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        text-align: center;
+        padding: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 1.3s;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="chat"></div>
+<div id="finalScreen">Que tengas un hermoso día mi amor 💖</div>
+
+<script>
+let mensajes = [
+    "Buen día preciosa",
+    "deseo que hoy",
+    "tu día empiece con esa energía hermosa que tenés…",
+    "con una sonrisa que ilumine todo…",
+    "con esos ojos preciosos",
+    "y ese suspiro tuyo que hace latir fuerte mi cora",
+    "dejando atrás todo lo que pesa…",
+    "y avanzando con la fuerza que te hace única.",
+    "Quiero decirte.…",
+    "algo que siento",
+     "siempre pensando en vos…",
+     "extrañándote",
+    "Que sos importante para mí", 
+    "más de lo que imaginás.",
+    "Mi Hermosa…",
+    "con un corazón gigantesco…",
+    "auténtica… ÚNICA",
+    "y tan valiente que me inspiras todos los días.",
+    "disculpa mis tropiezos",
+    "me conociste en mi peor momento",
+    "y donde no buscaba nada",
+    "apareciste para hacerme fuerte",
+    "junto a vos... los dos unidos",
+    "Quiero verte brillar, siempre",
+    "Sos el amor de mi vida.",
+    "Gracias por dejarme estar en tu vida.",
+    "Yo también pongo todo de mí…",
+    "porque quiero ser alguien que te haga bien.",
+    "Haría lo que fuera por vos, sin pensarlo.",
+    "Te quiero. Te quiero muchísimo❤️"
+];
+
+let index = 0;
+let started = false;
+
+document.addEventListener("click", () => {
+    if (!started) {
+        started = true;
+        mostrarSiguiente();
+    }
+});
+
+function mostrarSiguiente() {
+    let chat = document.getElementById("chat");
+
+    if (index >= mensajes.length) {
+        setTimeout(borrarMensajesUnoPorUno, 2200);
+        return;
+    }
+
+    let typing = document.createElement("div");
+    typing.className = "typing";
+    typing.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
+    chat.appendChild(typing);
+    chat.scrollTop = chat.scrollHeight;
+
+    let delay = Math.min(3500, 900 + mensajes[index].length * 50);
+
+    setTimeout(() => {
+        typing.remove();
+
+        let msg = document.createElement("div");
+        msg.className = "msg";
+        msg.textContent = mensajes[index];
+        chat.appendChild(msg);
+        chat.scrollTop = chat.scrollHeight;
+
+        index++;
+
+        setTimeout(mostrarSiguiente, 900);
+    }, delay);
+}
+
+function borrarMensajesUnoPorUno() {
+    let chat = document.getElementById("chat");
+    let mensajesDOM = chat.querySelectorAll(".msg");
+
+    if (mensajesDOM.length === 0) {
+        aparecerPantallaFinal();
+        return;
+    }
+
+    let ultimo = mensajesDOM[mensajesDOM.length - 1];
+
+    // efecto suave de desvanecimiento
+    ultimo.style.transition = "opacity 0.5s";
+    ultimo.style.opacity = "0";
+
+    setTimeout(() => {
+        ultimo.remove();
+        borrarMensajesUnoPorUno();
+    }, 100);
+}
+
+function aparecerPantallaFinal() {
+    let final = document.getElementById("finalScreen");
+    final.style.opacity = "1";
+}
+</script>
+
+</body>
+</html>
